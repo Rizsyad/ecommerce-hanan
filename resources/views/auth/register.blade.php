@@ -16,34 +16,37 @@
                             <div class="text-center mb-5">
                                 <h3>Register to <strong>Ecommerce</strong></h3>
                             </div>
-                            <form action="{{route('registerProcess')}}" method="post">
+                            <form action="{{ route('registerProcess') }}" method="post">
                                 @csrf
-                                <div class="form-group first">
-                                    <label for="username">Username</label>
-                                    <input type="text" class="form-control" name="username" placeholder="username"
-                                        id="username">
-                                    <small class="form-text text-danger">
-                                        @error('username')
-                                            {{$message}}
-                                        @enderror
-                                    </small>
-                                </div>
-                                <div class="form-group first">
+                                 <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="email" class="form-control" name="email" placeholder="email@email.com"
                                         id="email">
                                     <small class="form-text text-danger">
-                                    @error('email')
-                                        {{$message}}
-                                    @enderror
-                                </small>
+                                        @error('email')
+                                            {{ $message }}
+                                        @enderror
+                                    </small>
                                 </div>
-                                <div class="form-group last mb-3">
+
+                                <div class="form-group">
+                                    <label for="name">Username</label>
+                                    <input type="text" class="form-control" name="name" placeholder="username"
+                                        id="name" />
+                                    <small class="form-text text-danger">
+                                        @error('name')
+                                            {{ $message }}
+                                        @enderror
+                                    </small>
+                                </div>
+                               
+                                <div class="form-group mb-3">
                                     <label for="password">Password</label>
-                                    <input type="password" class="form-control" name="password" placeholder="Your Password" id="password">
+                                    <input type="password" class="form-control" name="password" placeholder="Your Password"
+                                        id="password" />
                                     <small class="form-text text-danger">
                                         @error('password')
-                                            {{$message}}
+                                            {{ $message }}
                                         @enderror
                                     </small>
                                 </div>

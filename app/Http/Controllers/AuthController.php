@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -32,7 +33,7 @@ class AuthController extends Controller
         $validate = $request->validate([
             'name' => 'required|min:3|max:255',
             'email' => 'required|email',
-            'password' => 'required|confirmed'
+            'password' => 'required'
         ]);
 
         $validate['password'] = bcrypt($validate['password']);

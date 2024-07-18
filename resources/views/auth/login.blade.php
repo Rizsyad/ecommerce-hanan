@@ -18,7 +18,7 @@
                             </div>
                             <form action="{{ route('loginProcess') }}" method="post">
                                 @csrf
-                                <div class="form-group first">
+                                <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="email" class="form-control" name="email"
                                         placeholder="your-email@gmail.com" id="email">
@@ -29,9 +29,9 @@
                                     </small>
 
                                 </div>
-                                <div class="form-group last mb-3">
+                                <div class="form-group mb-3">
                                     <label for="password">Password</label>
-                                    <input type="password" class="form-control" placeholder="Your Password"
+                                    <input type="password" name="password" class="form-control" placeholder="Your Password"
                                         id="password" />
                                     <small class="form-text text-danger">
                                         @error('password')
