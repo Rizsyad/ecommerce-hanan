@@ -15,8 +15,13 @@
                         <div class="form-block">
                             <div class="text-center mb-5">
                                 <h3>Login to <strong>Ecommerce</strong></h3>
+                                @if(session('error'))
+                                <div class="alert alert-danger">
+                                    <b>Opps!</b> {{session('error')}}
+                                </div>
+                                @endif
                             </div>
-                            <form action="{{ route('loginProcess') }}" method="post">
+                            <form action="{{ route('proses-login') }}" method="post">
                                 @csrf
                                 <div class="form-group">
                                     <label for="email">Email</label>
@@ -27,8 +32,8 @@
                                             {{ $message }}
                                         @enderror
                                     </small>
-
                                 </div>
+
                                 <div class="form-group mb-3">
                                     <label for="password">Password</label>
                                     <input type="password" name="password" class="form-control" placeholder="Your Password"
@@ -39,7 +44,10 @@
                                         @enderror
                                     </small>
                                 </div>
+
                                 <button type="submit" class="btn btn-block btn-primary">Log In</button>
+
+                                <p class="text-center mt-3">Don't have an account ? <a href="{{ route('register') }}">Sign Up</a> </p>
                             </form>
                         </div>
                     </div>

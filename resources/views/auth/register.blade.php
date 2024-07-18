@@ -16,7 +16,7 @@
                             <div class="text-center mb-5">
                                 <h3>Register to <strong>Ecommerce</strong></h3>
                             </div>
-                            <form action="{{ route('registerProcess') }}" method="post">
+                            <form action="{{ route('proses-register') }}" method="post">
                                 @csrf
                                  <div class="form-group">
                                     <label for="email">Email</label>
@@ -51,6 +51,8 @@
                                     </small>
                                 </div>
                                 <button type="submit" class="btn btn-block btn-primary">Register</button>
+
+                                <p class="text-center mt-3">Already have an account ? <a href="{{ route('login') }}">Sign In</a> </p>
                             </form>
                         </div>
                     </div>

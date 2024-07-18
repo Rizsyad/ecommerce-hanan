@@ -4,27 +4,47 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
     public function login()
     {
+        // jika user mempunyai session
+        if (Auth::check()) {
+            return redirect('dashboard');
+        }
+
         return view('auth.login');
     }
 
-    public function loginProcess(Request $request){
+    public function loginProcess(Request $request)
+    {
+        // validasi inputan
         $validate = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
-        if (auth()->attempt($validate)) {
+
+        // jika login berhasil
+        if (Auth::Attempt($validate)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect('dashboard');
         }
+
+        // jika login gagal
+        Session::flash('error', 'Incorrect Email or Password');
+        return redirect('auth/login');
     }
 
     public function register()
     {
+        // jika user mempunyai session
+        if (Auth::check()) {
+            return redirect('dashboard');
+        }
+
         return view('auth.register');
     }
 
@@ -33,29 +53,20 @@ class AuthController extends Controller
         $validate = $request->validate([
             'name' => 'required|min:3|max:255',
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         $validate['password'] = bcrypt($validate['password']);
 
         User::create($validate);
+        Auth::Attempt($validate);
 
-        auth()->attempt($validate);
-
-        $request->session()->regenerate();
-        return redirect()->intended('dashboard');
+        return redirect('dashboard');
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        auth()->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        Auth::logout();
         return redirect('/');
-    }
-
-    public function dashboard()
-    {
-        // return view('auth.register');
     }
 }
