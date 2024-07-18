@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 
 // auth page
 Route::controller(AuthController::class)->prefix('auth')->group(function() {
+    
     Route::get('/login', 'login')->name('login');
     Route::get('/register', 'register')->name('register');
     Route::get('/logout', 'logout')->name('logout');
@@ -17,7 +18,7 @@ Route::controller(AuthController::class)->prefix('auth')->group(function() {
 
 // dashboard 
 Route::controller(DashboardController::class)->prefix('dashboard')->group(function() {
-    Route::get('/', 'index');
+    Route::get('/', [DashboardController::class, 'index']);
 });
 
 // home page
