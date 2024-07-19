@@ -27,17 +27,23 @@ Route::controller(DashboardController::class)->prefix('dashboard')->name('dashbo
     Route::controller(CategoryController::class)->prefix('categories')->name('categories.')->group(function() {
         Route::get('/','index')->name('index');
         Route::get('/create','create')->name('create');
-        Route::get('/create/process','create')->name('store');
-        Route::get('/edit/{id}','edit')->name('edit');
-        Route::get('/edit/{id}/process','edit')->name('update');
+        Route::post('/create/process','store')->name('store');
+        Route::get('/{slug}/edit','edit')->name('edit');
+        Route::put('/{slug}/edit//process','update')->name('update');
+        Route::delete('/delete/{slug}','destroy')->name('destroy');
     });
     
     Route::controller(ProductController::class)->prefix('product')->name('product.')->group(function() {
         Route::get('/','index')->name('index');
         Route::get('/create','create')->name('create');
-        Route::get('/create/process','create')->name('store');
-        Route::get('/edit/{id}','edit')->name('edit');
-        Route::get('/edit/{id}/process','edit')->name('update');
+        Route::post('/create/process','store')->name('store');
+        Route::get('/edit/{slug}','edit')->name('edit');
+        Route::put('/edit/{slug}/process','update')->name('update');
+        Route::delete('/delete/{slug}','destroy')->name('destroy');
+        Route::get('{slug}/list-image','listImage')->name('list-image');
+        Route::get('{slug}/add-image','addImage')->name('add-image');
+        Route::post('{slug}/add-image/store','storeImage')->name('store-image');
+        Route::delete('{slug}/delete-image/{id}/delete','deleteImage')->name('delete-image');
     });
 });
 

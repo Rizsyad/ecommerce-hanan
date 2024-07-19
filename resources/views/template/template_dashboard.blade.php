@@ -41,8 +41,6 @@
 
     <!-- Helpers -->
     <script src="{{asset('back/assets/vendor/js/helpers.js')}}"></script>
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('back/assets/js/config.js')}}"></script>
   </head>
 
@@ -144,13 +142,13 @@
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Tools</span></li>
             <!-- Cards -->
             <li class="menu-item">
-              <a href="cards-basic.html" class="menu-link">
+              <a href="{{route('dashboard.product.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Basic">Product</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="cards-basic.html" class="menu-link">
+              <a href="{{route('dashboard.categories.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Basic">Categories</div>
               </a>
