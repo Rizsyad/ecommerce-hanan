@@ -46,20 +46,20 @@ class AuthController extends Controller
 
     public function register()
     {
-        // jika user mempunyai session
+        // Cek jika pengguna sudah login
         if (Auth::check()) {
-            // jika admin redirect ke dashboard
-            if (auth()->user()->getRoleNames()->first() === 'admin') {
-                return redirect('dashboard');
+            // Jika admin, redirect ke dashboard
+            if (auth()->user()->hasRole('admin')) {
+                return redirect()->route('dashboard');
             }
-
-            // jika user redirect ke index lagi
-            return redirect('/');
+    
+            // Jika pengguna biasa, redirect ke halaman utama
+            return redirect()->route('home');
         }
-
-        
+    
         return view('auth.register');
     }
+    
 
     public function registerProcess(Request $request)
     {
