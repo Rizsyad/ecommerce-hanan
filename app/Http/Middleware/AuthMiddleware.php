@@ -16,8 +16,7 @@ class AuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // jika tidak mempunyai session
-        if (!Auth::check()) {
+        if(auth()->check()) {
             return $next($request);
         }
         

@@ -11,7 +11,7 @@ use App\Http\Controllers\TestController;
 Route::get('/sendmail', [TestController::class, 'testmail']);
 
 // auth page
-Route::controller(AuthController::class)->middleware(['isLogined'])->group(function () {
+Route::controller(AuthController::class)->middleware('guest')->group(function () {
     Route::get('login', 'login')->name('login');
     Route::get('register', 'register')->name('register');
     Route::get('logout', 'logout')->name('logout');

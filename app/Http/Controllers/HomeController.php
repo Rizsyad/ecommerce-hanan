@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,15 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return view('index');
+        $data = [];
+        $data['products'] = Product::with('category')->latest()->limit(8)->get();
+        
+        $data['categories'] = Category::select('id', 'name_category')->latest()->get();
+        $data['homeCategories'] = Category::withCount('products')->latest()->limit(4)->get();
+        // dd($data['homeCategories']);
+        // dd($data['categories']);
+        // dd($data);
+        return view('index', compact('data'));
     }
 
     public function shop()
