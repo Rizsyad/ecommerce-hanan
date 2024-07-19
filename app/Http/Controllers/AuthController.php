@@ -58,7 +58,9 @@ class AuthController extends Controller
 
         $validate['password'] = bcrypt($validate['password']);
 
-        User::create($validate);
+        $user = User::create($validate);
+        $user->assignRole('user');
+        
         Auth::Attempt($validate);
 
         return redirect('dashboard');

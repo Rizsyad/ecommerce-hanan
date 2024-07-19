@@ -11,17 +11,19 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $categoriesCount = Category::count();
-        $productsCount = Product::count();
-        // $ratings = ProductRating::with('product')->count();
-        
+        if(auth()->user()->getRoleNames()->first() === "admin") {
+            $categoriesCount = Category::count();
+            $productsCount = Product::count();
+            
+            $data = [
+                'categoriesCount' => $categoriesCount,
+                'productsCount' => $productsCount
+            ];
+    
+            return view('dashboard.index');
+        }
 
-        $data = [
-            'categoriesCount' => $categoriesCount,
-            'productsCount' => $productsCount
-        ];
-        dd($data);
+        return view('dashboard.index');
 
-        return view('dashboard.index', $data);
     }
 }
