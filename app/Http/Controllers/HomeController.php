@@ -10,4 +10,19 @@ class HomeController extends Controller
     {
         return view('index');
     }
+
+    public function shop()
+    {
+        $header = [
+            "title" => "Our Shop",
+            "menu" => "Shop"
+        ];
+
+        $data = (object) [
+            "header" => (object) $header
+        ];
+
+
+        return view('shop', compact('data'));
+    }
 }

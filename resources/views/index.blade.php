@@ -1,4 +1,4 @@
-@extends('template.template')
+@extends('template.template_home')
 
 @section('title', 'Dashboard')
 
@@ -7,11 +7,26 @@
 @endsection
 
 @section('content')
-    ini untuk semua role: role kamu adalah 
 
-    @auth
+    @include('components.featured')
+
+    @include('components.categories')
+
+    {{-- nyalakan jika perlu --}}
+    {{-- @include('components.offer')   --}}
+
+    @include('components.products-with-title', ['title' => 'Trandy Products'])
+
+    @include('components.subscribe')
+
+    @include('components.products-with-title', ['title' => 'Just Arrived'])
+
+    @include('components.vendor')
+
+    {{-- @auth
         <b>{{ auth()->user()->getRoleNames()->first() }}</b> 
-    @endauth
+    @endauth --}}
+    
 @endsection
 
 @section('footer')
