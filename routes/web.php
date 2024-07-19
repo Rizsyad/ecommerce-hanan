@@ -20,20 +20,22 @@ Route::controller(AuthController::class)->middleware(['isLogined'])->group(funct
 // dashboard 
 Route::controller(DashboardController::class)->prefix('dashboard')->name('dashboard.')->group(function() {
     Route::get('/', 'index')->name('index');
-});
-Route::controller(CategoryController::class)->prefix('categories')->name('categories.')->group(function() {
-    Route::get('/','index')->name('index');
-    Route::get('/create','create')->name('create');
-    Route::get('/create/process','create')->name('store');
-    Route::get('/edit/{id}','edit')->name('edit');
-    Route::get('/edit/{id}/process','edit')->name('update');
-});
-Route::controller(ProductController::class)->prefix('product')->name('product.')->group(function() {
-    Route::get('/','index')->name('index');
-    Route::get('/create','create')->name('create');
-    Route::get('/create/process','create')->name('store');
-    Route::get('/edit/{id}','edit')->name('edit');
-    Route::get('/edit/{id}/process','edit')->name('update');
+
+    Route::controller(CategoryController::class)->prefix('categories')->name('categories.')->group(function() {
+        Route::get('/','index')->name('index');
+        Route::get('/create','create')->name('create');
+        Route::get('/create/process','create')->name('store');
+        Route::get('/edit/{id}','edit')->name('edit');
+        Route::get('/edit/{id}/process','edit')->name('update');
+    });
+    
+    Route::controller(ProductController::class)->prefix('product')->name('product.')->group(function() {
+        Route::get('/','index')->name('index');
+        Route::get('/create','create')->name('create');
+        Route::get('/create/process','create')->name('store');
+        Route::get('/edit/{id}','edit')->name('edit');
+        Route::get('/edit/{id}/process','edit')->name('update');
+    });
 });
 
 // home page
