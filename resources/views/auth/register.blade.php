@@ -1,4 +1,4 @@
-@extends('components.template_login')
+@extends('template.template_login')
 
 @section('title', 'Register')
 

@@ -1,4 +1,4 @@
-@extends('components.template')
+{{-- @extends('template.template')
 
 @section('title', 'Dashboard')
 
@@ -7,9 +7,9 @@
 @endsection
 
 @section('content')
-    ini dashboard untuk semua role: role kamu adalah <b>{{ auth()->user()->getRoleNames()->first() }}</b> 
+    ini dashboard untuk emua role: role kamu adalah <b>{{ auth()->user()->getRoleNames()->first() }}</b> 
 @endsection
 
 @section('footer')
     
-@endsection
+@endsection --}}
