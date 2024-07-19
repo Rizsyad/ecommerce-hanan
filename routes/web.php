@@ -6,6 +6,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TestController;
+
+Route::get('/sendmail', [TestController::class, 'testmail']);
 
 // auth page
 Route::controller(AuthController::class)->middleware(['isLogined'])->group(function () {
