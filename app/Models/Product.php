@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Category;
 use App\Models\ProductImage;
-use App\Models\ProductRating;
+use App\Models\ProductReviews;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -23,8 +23,8 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-    public function ratings()
+    public function reviews()
     {
-        return $this->hasMany(ProductRating::class);
+        return $this->hasMany(ProductReviews::class);
     }
 }

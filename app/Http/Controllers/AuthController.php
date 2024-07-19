@@ -79,14 +79,16 @@ class AuthController extends Controller
 
         Auth::Attempt($validate);
 
-        if(auth()->user()->getRoleNames()->first() === "admin") return redirect('dashboard');
+        if(auth()->user()->getRoleNames()->first() === "admin") return redirect(route('dashboard.index'));
 
         return redirect('/');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect(route('login'));
     }
 }

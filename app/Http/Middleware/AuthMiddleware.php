@@ -20,6 +20,6 @@ class AuthMiddleware
             return $next($request);
         }
         
-        return redirect('/');
+        return redirect(route('login'));
     }
 }

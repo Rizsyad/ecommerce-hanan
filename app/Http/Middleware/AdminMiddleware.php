@@ -16,11 +16,10 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // jika role user maka jangan kasih akses
-        if (auth()->user()->getRoleNames()->first() === 'user') {
-            abort(401);
+        if(Auth::check() && Auth::user()->hasRole('admin')) {
+            return $next($request);
         }
 
-        return $next($request);
+        return redirect()->route('home');
     }
 }

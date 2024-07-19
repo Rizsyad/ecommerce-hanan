@@ -70,8 +70,10 @@
 
                         @auth
                             <div class="navbar-nav ml-auto py-0">
-                                <p class="nav-item nav-link">Selamat Datang, <b>{{auth()->user()->name}}</b></p>
-                                <a href="{{ route('logout') }}" class="nav-item nav-link">Keluar</a>
+                                <p class="nav-item nav-link">Welcome Back, <b>{{auth()->user()->name}}</b></p>
+                                
+
+                                <a href="{{ route('logout') }}" class="nav-item nav-link">Logout</a>
                             </div>
                         @endauth
 
