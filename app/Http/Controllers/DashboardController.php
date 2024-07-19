@@ -11,14 +11,14 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        // Cek jika peran pengguna adalah 'user', berikan akses terlarang
+        if (auth()->user()->hasRole('user')) {
+            abort(403);
+        }
+        
         $categoriesCount = Category::count();
         $productsCount = Product::count();
 
-        $data = [
-            'categoriesCount' => $categoriesCount,
-            'productsCount' => $productsCount,
-        ];
-
-        return view('dashboard.index', $data);
+        return view('dashboard.index', compact('categoriesCount', 'productsCount'));
     }
 }
