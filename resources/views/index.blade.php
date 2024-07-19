@@ -17,11 +17,11 @@
 
     @include('components.products-with-title', ['title' => 'Trandy Products'])
 
-    @include('components.subscribe')
+    {{-- @include('components.subscribe') --}}
 
-    @include('components.products-with-title', ['title' => 'Just Arrived'])
+    {{-- @include('components.products-with-title', ['title' => 'Just Arrived']) --}}
 
-    @include('components.vendor')
+    {{-- @include('components.vendor') --}}
 
 @endsection
 
