@@ -11,8 +11,8 @@ class AuthController extends Controller
 {
     public function login()
     {
-        // jika user mempunyai session
-        if (Auth::check()) {
+         // jika user mempunyai session
+         if (Auth::check()) {
             // jika admin redirect ke dashboard
             if (auth()->user()->getRoleNames()->first() === 'admin') {
                 return redirect('dashboard');
@@ -36,7 +36,9 @@ class AuthController extends Controller
         // jika login berhasil
         if (Auth::Attempt($validate)) {
             $request->session()->regenerate();
-            return redirect('dashboard');
+
+            if(auth()->user()->getRoleNames()->first() === "admin") return redirect('dashboard');
+            return redirect('/');
         }
 
         // jika login gagal
@@ -45,7 +47,7 @@ class AuthController extends Controller
     }
 
     public function register()
-    {
+    {        
         // jika user mempunyai session
         if (Auth::check()) {
             // jika admin redirect ke dashboard
@@ -56,7 +58,6 @@ class AuthController extends Controller
             // jika user redirect ke index lagi
             return redirect('/');
         }
-
         
         return view('auth.register');
     }
@@ -75,6 +76,8 @@ class AuthController extends Controller
         $user->assignRole('user');
 
         Auth::Attempt($validate);
+
+        if(auth()->user()->getRoleNames()->first() === "admin") return redirect('dashboard');
 
         return redirect('/');
     }

@@ -1,6 +1,6 @@
 @extends('template.template_home')
 
-@section('title', 'Dashboard')
+@section('title', '- Shoping')
 
 @section('head')
     
@@ -23,10 +23,6 @@
 
     @include('components.vendor')
 
-    {{-- @auth
-        <b>{{ auth()->user()->getRoleNames()->first() }}</b> 
-    @endauth --}}
-    
 @endsection
 
 @section('footer')

@@ -58,17 +58,21 @@
                             <a href="{{route('home.index')}}"
                                 class="nav-item nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
                             <a href="{{route('home.shop')}}"
-                                class="nav-item nav-link {{ request()->is('shop/*') ? 'active' : '' }}">Shop</a>
+                                class="nav-item nav-link {{ request()->is('shop') ? 'active' : '' }}">Shop</a>
                             {{-- <a href="detail.html" class="nav-item nav-link">Shop Detail</a> --}}
 
-                            <div class="nav-item dropdown">
+                            {{-- <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu rounded-0 m-0">
                                     <a href="cart.html" class="dropdown-item">Shopping Cart</a>
                                     <a href="checkout.html" class="dropdown-item">Checkout</a>
                                 </div>
-                            </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            </div> --}}
+
+                            {{-- <a href="contact.html" class="nav-item nav-link">Cart</a> 
+                            <a href="contact.html" class="nav-item nav-link">Checkout</a> --}}
+
+                            {{-- <a href="contact.html" class="nav-item nav-link">Contact</a> --}}
                         </div>
 
                         @guest
@@ -77,6 +81,13 @@
                                 <a href="{{ route('register') }}" class="nav-item nav-link">Register</a>
                             </div>
                         @endguest
+
+                        @auth
+                            <div class="navbar-nav ml-auto py-0">
+                                <p class="nav-item nav-link">Selamat Datang, <b>{{auth()->user()->name}}</b></p>
+                                <a href="{{ route('logout') }}" class="nav-item nav-link">Keluar</a>
+                            </div>
+                        @endauth
 
                     </div>
                 </nav>

@@ -11,11 +11,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // jika role user maka jangan kasih akses
-        if (auth()->user()->getRoleNames()->first() === 'user') {
-            abort(403);
-        }
-        
         $categoriesCount = Category::count();
         $productsCount = Product::count();
 
