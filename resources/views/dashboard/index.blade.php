@@ -15,9 +15,7 @@
                             <div class="card-body">
                                 <h5 class="card-title text-primary">Congratulations! 🎉</h5>
                                 <p class="mb-4">
-                                    You have done <span class="fw-medium">72%</span> more sales today. Check your new badge
-                                    in
-                                    your profile.
+                                    You have done <span class="fw-bold">{{$data['orderSalesToday']}}</span> more in this month.
                                 </p>
 
                                 <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>

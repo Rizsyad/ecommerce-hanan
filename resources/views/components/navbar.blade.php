@@ -44,9 +44,9 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="{{ route('home.index') }}"
-                                class="nav-item nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
+                                class="nav-item nav-link {{ request()->routeIs('home.index') ? 'active' : '' }}">Home</a>
                             <a href="{{ route('home.shop') }}"
-                                class="nav-item nav-link {{ request()->is('shop') ? 'active' : '' }}">Shop</a>
+                                class="nav-item nav-link {{ request()->routeIs('home.shop') ? 'active' : '' }}">Shop</a>
                         </div>
 
                         @guest
@@ -111,8 +111,6 @@
                         </a>
                     </div>
                 @endif
-
-
             </div>
         </div>
     </div>

@@ -23,6 +23,7 @@ Route::controller(AuthController::class)->group(function () {
 // dashboard 
 Route::controller(DashboardController::class)->middleware(['auth', 'isAdmin'])->prefix('dashboard')->name('dashboard.')->group(function() {
     Route::get('/', 'index')->name('index');
+    Route::get('/transaction', 'transaction')->name('transaction');
 
     Route::controller(CategoryController::class)->prefix('categories')->name('categories.')->group(function() {
         Route::get('/','index')->name('index');

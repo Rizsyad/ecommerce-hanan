@@ -19,18 +19,12 @@ class HomeController extends Controller
     // buat function untuk memanggil secara global
     private function shareCategories()
     {
-        // dd(auth()->user()->id);
-        
         $categories = Category::select('id', 'name_category')->latest()->get();
-        // $countCart = ProductCart::where('user_id', auth()->user()->id)->count();
-
         view()->share('categories', $categories);
-        // view()->share('countCart', $countCart);
     }
 
     public function index()
     {
-        $data = [];
         $data['products'] = Product::latest()->limit(8)->get();
         $data['homeCategories'] = Category::withCount('products')->latest()->limit(4)->get();
         return view('index', compact('data'));
@@ -75,6 +69,11 @@ class HomeController extends Controller
 
     public function shopDetail(Request $request)
     {
+        // jika tidak mempunyai session, redirect ke login
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
         $header = [
             'title' => 'SHOP DETAIL',
             'menu' => 'Shop Detail',
@@ -82,7 +81,7 @@ class HomeController extends Controller
 
         $product = Product::with([
             'images' => function ($query) {
-                $query->select('product_id', 'image'); // Specify necessary columns
+                $query->select('product_id', 'image');
             },
             'reviews' => function ($query) {
                 $query->select('id', 'product_id', 'rating', 'review', 'user_id');
@@ -100,7 +99,6 @@ class HomeController extends Controller
             abort(404);
         }
 
-        // tampilakan random product, kecuali product active
         $randomProduct = Product::where('slug', '!=', $request->slug)
             ->inRandomOrder()
             ->limit(8)
@@ -121,8 +119,6 @@ class HomeController extends Controller
             'randomProduct' => $randomProduct,
             'isUserReviewed' => $userReviewed,
         ];
-
-        // return response()->json($data);
 
         return view('shop-details', compact('data'));
     }
@@ -269,7 +265,7 @@ class HomeController extends Controller
         $cart = ProductCart::select('id', 'product_id', 'user_id', 'quantity')->with(
             [
                 'product' => function ($query) {
-                    $query->select('id', 'image', 'name_product', 'price'); // Specify necessary columns
+                    $query->select('id', 'image', 'name_product', 'price'); 
                 },
                 'user' => function ($query) {
                     $query->select('id', 'name');
@@ -295,7 +291,7 @@ class HomeController extends Controller
         $cart = ProductCart::select('id', 'product_id', 'user_id', 'quantity')->with(
             [
                 'product' => function ($query) {
-                    $query->select('id', 'name_product', 'price'); // Specify necessary columns
+                    $query->select('id', 'name_product', 'price');
                 },
                 'user' => function ($query) {
                     $query->select('id', 'name');
