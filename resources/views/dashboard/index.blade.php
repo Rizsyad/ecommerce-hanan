@@ -7,108 +7,137 @@
 @endsection
 
 @section('content-back')
-        <div class="row">
-            <div class="col-lg-8 mb-4 order-0">
-                <div class="card">
-                    <div class="d-flex align-items-end row">
-                        <div class="col-sm-7">
-                            <div class="card-body">
-                                <h5 class="card-title text-primary">Congratulations! 🎉</h5>
-                                <p class="mb-4">
-                                    You have done <span class="fw-bold">{{$data['orderSalesToday']}}</span> more in this month.
-                                </p>
+    <div class="row">
 
-                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
-                            </div>
-                        </div>
-                        <div class="col-sm-5 text-center text-sm-left">
-                            <div class="card-body pb-0 px-0 px-md-4">
-                                <img src="../back/assets/img/illustrations/man-with-laptop-light.png" height="140"
-                                    alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png"
-                                    data-app-light-img="illustrations/man-with-laptop-light.png">
-                            </div>
+        <div class="col-lg-12 col-md-4 order-1">
+            <div class="row">
+                <div class="col-lg-3 col-md-12 col-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <span class="fw-medium d-block mb-1">Total Sales (Monthly)</span>
+                            <h3 class="card-title mb-2">Rp. {{ number_format($data['totalAmountMonthly'], 0, ',', '.') }}
+                            </h3>
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-3 col-md-12 col-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <span>Total Orders (Monthly)</span>
+                            <h3 class="card-title mb-2">{{ $data['totalOrderMonthly'] }} </h3>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12 col-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <span>Product Sold (Monthly)</span>
+                            <h3 class="card-title text-nowrap mb-1">{{ $data['productSold'] }}</h3>
+                        </div>
+                    </div>
+                </div>
+               
             </div>
-            <div class="col-lg-4 col-md-4 order-1">
-                <div class="row">
-                    <div class="col-lg-6 col-md-12 col-6 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-title d-flex align-items-start justify-content-between">
-                                    <div class="avatar flex-shrink-0">
-                                        <img src="../back/assets/img/icons/unicons/chart-success.png" alt="chart success"
-                                            class="rounded">
-                                    </div>
-                                    <div class="dropdown">
-                                        <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="bx bx-dots-vertical-rounded"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                            <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="fw-medium d-block mb-1">Profit</span>
-                                <h3 class="card-title mb-2">$12,628</h3>
-                                <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
-                            </div>
+        </div>
+        <div class="col-lg-12 col-md-4 order-1">
+            <div class="row">
+                <div class="col-lg-3 col-md-12 col-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <span class="fw-medium d-block mb-1">Status Order (Pending)</span>
+                            <h3 class="card-title mb-2">{{ $data['orderTrackingStatus']['pending'] }}</h3>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-12 col-6 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-title d-flex align-items-start justify-content-between">
-                                    <div class="avatar flex-shrink-0">
-                                        <img src="../back/assets/img/icons/unicons/wallet-info.png" alt="Credit Card"
-                                            class="rounded">
-                                    </div>
-                                    <div class="dropdown">
-                                        <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="bx bx-dots-vertical-rounded"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
-                                            <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span>Sales</span>
-                                <h3 class="card-title text-nowrap mb-1">$4,679</h3>
-                                <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
-                            </div>
+                </div>
+                <div class="col-lg-3 col-md-12 col-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <span class="fw-medium d-block mb-1">Status Order (Processing)</span>
+                            <h3 class="card-title mb-2">{{ $data['orderTrackingStatus']['processing'] }}</h3>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-12 col-6 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-title d-flex align-items-start justify-content-between">
-                                    <div class="avatar flex-shrink-0">
-                                        <img src="../back/assets/img/icons/unicons/wallet-info.png" alt="Credit Card"
-                                            class="rounded">
-                                    </div>
-                                    <div class="dropdown">
-                                        <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="bx bx-dots-vertical-rounded"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
-                                            <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span>Sales</span>
-                                <h3 class="card-title text-nowrap mb-1">$4,679</h3>
-                                <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
-                            </div>
+                </div>
+                <div class="col-lg-3 col-md-12 col-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <span class="fw-medium d-block mb-1">Status Order (Completed)</span>
+                            <h3 class="card-title mb-2">{{ $data['orderTrackingStatus']['completed'] }}</h3>
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-3 col-md-12 col-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <span class="fw-medium d-block mb-1">Status Order (Cancelled)</span>
+                            <h3 class="card-title mb-2">{{ $data['orderTrackingStatus']['cancelled'] }}</h3>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-4 order-1">
+            <div class="card">
+                <div class="table-responsive text-nowrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>No Invoice</th>
+                                <th>User</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @foreach ($orders as $order)
+                                <tr>
+                                    <td>
+                                        <span class="fw-medium">{{ $loop->iteration }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-medium">{{ $order->order_number }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-medium">{{ $order->user->name }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-medium">Rp.
+                                            {{ number_format($order->total_amount, 0, ',', '.') }}</span>
+                                    </td>
+
+                                    <td>
+                                        @if ($order->status == 'pending')
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        @elseif($order->status == 'processing')
+                                            <span class="badge bg-primary text-white">Processing</span>
+                                        @elseif($order->status == 'completed')
+                                            <span class="badge bg-success text-white">Success</span>
+                                        @elseif($order->status == 'cancelled')
+                                            <span class="badge bg-danger text-white">Cancel</span>
+                                        @endif
+                                    </td>
+
+                                    <td>
+                                        <a href="{{ route('dashboard.orders.detail', $order->order_number) }}"
+                                            class="btn btn-primary">Detail</a>
+                                    </td>
+
+
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
 @endsection

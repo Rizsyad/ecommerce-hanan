@@ -5,8 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\UserController;
 
 Route::get('/sendmail', [TestController::class, 'testmail']);
 
@@ -46,6 +48,14 @@ Route::controller(DashboardController::class)->middleware(['auth', 'isAdmin'])->
         Route::post('{slug}/add-image/store','storeImage')->name('store-image');
         Route::delete('{slug}/delete-image/{id}/delete','deleteImage')->name('delete-image');
     });
+    Route::controller(OrderController::class)->prefix('orders')->name('orders.')->group(function() {
+        Route::get('/','index')->name('index');
+        Route::get('/{invoice}/details','detail')->name('detail');
+        Route::put('/{invoice}/status/update','updateStatus')->name('updateStatus');
+    });
+    Route::controller(UserController::class)->prefix('users')->name('users.')->group(function() {
+        Route::get('/','index')->name('index');
+    });
 });
 
 // home page
@@ -69,5 +79,5 @@ Route::controller(HomeController::class)
         Route::post('checkout', 'checkoutprocess')->name('checkoutprocess');
 
         // thank you
-        Route::get("/thank-you", 'index')->name('thankyou');
+        Route::get("/thank-you-order/{invoice}", 'thankyou')->name('thankyou');
     });

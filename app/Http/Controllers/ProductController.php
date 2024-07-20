@@ -74,11 +74,12 @@ class ProductController extends Controller
     public function edit(string $slug)
     {
         $product = Product::where('slug', $slug)->first();
+
         if(!$product) {
             abort(404);
         }
         $categories = Category::get();
-        return view('product.edit', compact('product'));
+        return view('product.edit', compact('product', 'categories'));
     }
 
     /**
@@ -86,14 +87,13 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $slug)
     {
-        $validated = $request->validate([
+        $request->validate([
             'name_product' => 'required|min:3|max:255',
             'price' => 'required|numeric',
-            'quantity' => 'required|integer|min:1',
             'stock' => 'required|integer|min:0',
             'description' => 'required|min:3|max:255',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
     
         $product = Product::where('slug', $slug)->first();
@@ -110,16 +110,16 @@ class ProductController extends Controller
         } else {
             $imgPath = $product->image;
         }
+
     
         $product->update([
-            'name_product' => $validated['name_product'],
-            'slug' => Str::slug($validated['name_product']),
-            'price' => $validated['price'],
-            'quantity' => $validated['quantity'],
-            'stock' => $validated['stock'],
-            'description' => $validated['description'],
-            'image' => $imgPath,
-            'category_id' => $validated['category_id'],
+            'name_product' => $request->name_product,
+            'slug' => Str::slug($request->name_product),
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'image' => $imgPath
         ]);
 
         return redirect()->route('dashboard.product.index');

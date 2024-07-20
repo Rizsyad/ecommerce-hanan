@@ -49,7 +49,7 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="{{ route('dashboard.product.list-image', $product->slug) }}">
-                                            <i class="bx bx-edit-alt me-1"></i> Add Image
+                                            <i class="bx bx-image-alt me-1"></i> Add Image
                                         </a>
                                         <a class="dropdown-item" href="{{ route('dashboard.product.edit', $product->slug) }}">
                                             <i class="bx bx-edit-alt me-1"></i> Edit

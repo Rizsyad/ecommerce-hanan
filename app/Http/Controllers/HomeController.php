@@ -232,27 +232,34 @@ class HomeController extends Controller
 
         $product = Product::find($id);
 
+        // check status berdasarkan stock jika pending jangan dikurangi dlu
+        $orderStatus = Order::whereHas('orderItems', function ($query) use ($id) {
+            $query->where('product_id', $id);
+        })->where('user_id', $userId)->value('status');
+
         $newQuantity = $request->input('quantity');
         $currentQuantity = $checkInCart->quantity;
 
-        if ($newQuantity > $currentQuantity) {
-            $difference = $newQuantity - $currentQuantity;
-
-            // Periksa apakah ada stok yang cukup
-            if ($product->stock < $difference) {
-                return back()->withErrors(['msg' => 'Not enough stock available']);
+        if($orderStatus == 'pending'){
+            if ($newQuantity > $currentQuantity) {
+                $difference = $newQuantity - $currentQuantity;
+    
+                // Periksa apakah ada stok yang cukup
+                if ($product->stock < $difference) {
+                    return back()->withErrors(['msg' => 'Not enough stock available']);
+                }
+    
+                // Kurangi stok produk
+                $product->stock -= $difference;
+            } else {
+                $difference = $currentQuantity - $newQuantity;
+    
+                // Kembalikan stok produk
+                $product->stock += $difference;
             }
 
-            // Kurangi stok produk
-            $product->stock -= $difference;
-        } else {
-            $difference = $currentQuantity - $newQuantity;
-
-            // Kembalikan stok produk
-            $product->stock += $difference;
+            $product->save();
         }
-
-        $product->save();
 
         // Update jumlah di keranjang
         $checkInCart->quantity = $newQuantity;
@@ -336,10 +343,12 @@ class HomeController extends Controller
             return $cart->quantity * $cart->product->price;
         });
 
+        $randomNumber = rand(1000000000, 9999999999);
+
         // Buat pesanan baru
         $order = Order::create([
             'user_id' => $userId,
-            'order_number' => rand(0, 200),
+            'order_number' => 'INV-' . $randomNumber,
             'total_amount' => $totalAmount,
             'address' => $address,
         ]);
@@ -357,6 +366,8 @@ class HomeController extends Controller
                     'product_id' => $cart->product_id,
                     'quantity' => $cart->quantity,
                     'amount' => $cart->quantity * $cart->product->price,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ];
             })
             ->toArray();
@@ -385,63 +396,26 @@ class HomeController extends Controller
         Mail::to(auth()->user())->send(new InvoiceMail($orderItems, $orderDetails));
 
         // Redirect ke halaman terima kasih
-        return redirect(route('home.thankyou'));
+        return redirect(route('home.thankyou', $order->order_number));
     }
 
-    // public function checkoutprocess(Request $request)
-    // {
-    //     $request->validate([
-    //         // 'payment' => 'required',
-    //         'address' => 'required'
-    //     ]);
+    public function thankyou(Request $request,string $invoice)
+    {
+        $header = [
+            'title' => 'thankyou',
+            'menu' => 'thankyou',
+        ];
 
-    //     // $payment = $request->payment;
-    //     $address = $request->address;
+        $invoice = Order::where('order_number', $invoice)->first();
+        if(!$invoice) {
+            return back()->withErrors(['msg' => 'No Invoice not found']);
+        }
 
-    //     $getCart = ProductCart::with('product')->where('user_id', auth()->user()->id)->get();
+        $data = [
+            'header' => $header,
+            'invoice' => $invoice,
+        ];
 
-    //     // Cek jika keranjang belanja kosong
-    //     if ($getCart->isEmpty()) {
-    //         return back()->withErrors(['msg' => 'Sorry your cart is empty']);
-    //     }
-
-    //     $orders = Order::create([
-    //         'user_id' => auth()->user()->id,
-    //         'order_number' => rand(0, 200),
-    //         'total_amount' => $getCart->sum(function ($cart) {
-    //             return $cart->quantity * $cart->product->price;
-    //         }),
-    //         'address' => $address
-    //     ]);
-
-    //     if(!$orders) {
-    //         return back()->withErrors(['msg' => "Order cannot be processed"]);
-    //     }
-
-    //     $data = [];
-    //     foreach ($getCart as $cart) {
-    //         array_push($data, [
-    //             "order_id" => $orders->id,
-    //             "product_id" => $cart->product_id,
-    //             'quantity' => $cart->quantity,
-    //             "amount" => $cart->quantity * $cart->product->price
-    //         ]);
-    //     }
-
-    //     $orderItem = OrderItems::insert($data);
-
-    //     if(!$orderItem) {
-    //         Order::find($orders->id)->delete();
-    //         return back()->withErrors(['msg' => "Order cannot be processed"]);
-    //     }
-
-    //     ProductCart::with('product')->where('user_id', auth()->user()->id)->delete();
-
-    //     $orderItems = OrderItems::with(['order', 'product'])->where('order_id', $orders->id)->get();
-    //     $detailInfo = Order::with('user')->where('id', $orders->id)->first();
-
-    //     Mail::to('riz@gmail.com')->send(new InvoiceMail($orderItems, $detailInfo));
-
-    //     return redirect(route('home.thankyou'));
-    // }
+        return view('thankyou');
+    }
 }

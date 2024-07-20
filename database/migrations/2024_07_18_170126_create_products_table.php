@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug');
             $table->integer('price')->default(0);
             $table->integer('stock')->default(0);
-            $table->string('image')->nullable();
+            $table->string('image');
             $table->text('description')->nullable();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->timestamps();

@@ -102,7 +102,7 @@
                   </g>
                 </svg>
               </span>
-              <span class="app-brand-text demo menu-text fw-bold ms-2">Hanan Store</span>
+              <span class="app-brand-text demo menu-text fw-bold ms-2">Hannan Store</span>
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -115,43 +115,78 @@
           <ul class="menu-inner py-1">
             
 
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Apps &amp; Pages</span>
-            </li>
-            <!-- Apps -->
+        
             <li class="menu-item {{request()->routeIs('dashboard.index') ? 'active' : ''}}">
               <a
                 href="{{route("dashboard.index")}}"
                 class="menu-link">
-                <i class="menu-icon tf-icons bx bx-envelope"></i>
+                <i class="menu-icon tf-icons bx bx-home"></i>
                 <div data-i18n="Email">Dashboard</div>
               </a>
             </li>
-            <li class="menu-item {{request()->routeIs('dashboard.transaction') ? 'active' : ''}}">
-              <a
-                href="{{route('dashboard.transaction')}}"
-                target="_blank"
-                class="menu-link">
-                <i class="menu-icon tf-icons bx bx-envelope"></i>
-                <div data-i18n="Email">Transaction</div>
+
+            <li class="menu-item {{request()->routeIs('dashboard.categories.*', 'dashboard.product.*') ? 'active' : ''}}" style="">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-cart-alt"></i>
+                <div class="text-truncate" data-i18n="eCommerce">Product</div>
               </a>
+              <ul class="menu-sub">
+                <li class="menu-item {{request()->routeIs('dashboard.product.create') ? 'active' : ''}}">
+                  <a href="{{route('dashboard.product.create')}}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Dashboard">Add Product</div>
+                  </a>
+                </li>
+                <li class="menu-item {{request()->routeIs('dashboard.product.index') ? 'active' : ''}}">
+                  <a href="{{route('dashboard.product.index')}}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Dashboard">List Product</div>
+                  </a>
+                </li>
+                <li class="menu-item {{request()->routeIs('dashboard.categories.*') ? 'active' : ''}}">
+                  <a href="{{route('dashboard.categories.index')}}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Dashboard">Categories Product</div>
+                  </a>
+                </li>
+              </ul>
             </li>
-         
-            <!-- Components -->
-            <li class="menu-header small text-uppercase"><span class="menu-header-text">Tools</span></li>
-            <!-- Cards -->
-            <li class="menu-item {{request()->routeIs('dashboard.product.index') ? 'active' : ''}}">
-              <a href="{{route('dashboard.product.index')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Basic">Product</div>
+            <li class="menu-item {{request()->routeIs('dashboard.orders.*') ? 'active' : ''}}" style="">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-cart-alt"></i>
+                <div class="text-truncate" data-i18n="eCommerce">Orders</div>
               </a>
+              <ul class="menu-sub">
+                <li class="menu-item {{request()->routeIs('dashboard.orders.index') ? 'active' : ''}}">
+                  <a href="{{route('dashboard.orders.index')}}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Dashboard">Order List</div>
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li class="menu-item {{request()->routeIs('dashboard.categories.index') ? 'active' : ''}}">
-              <a href="{{route('dashboard.categories.index')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Basic">Categories</div>
+            <li class="menu-item {{request()->routeIs('dashboard.users.index') ? 'active' : ''}}" style="">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-user"></i>
+                <div class="text-truncate" data-i18n="eCommerce">Customer</div>
               </a>
+              <ul class="menu-sub">
+                <li class="menu-item {{request()->routeIs('dashboard.users.index') ? 'active' : ''}}">
+                  <a href="{{route('dashboard.users.index')}}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Dashboard">Customer List</div>
+                  </a>
+                </li>
+              </ul>
             </li>
+            {{-- <li class="menu-item {{request()->routeIs('dashboard.transaction') ? 'active' : ''}}" style="">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-money"></i>
+                <div class="text-truncate" data-i18n="eCommerce">Report</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item {{request()->routeIs('dashboard.transaction') ? 'active' : ''}}">
+                  <a href="{{route('dashboard.transaction')}}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Dashboard">Transaction</div>
+                  </a>
+                </li>
+              </ul>
+            </li> --}}
           </ul>
         </aside>
         <!-- / Menu -->
@@ -199,12 +234,12 @@
                     <li>
                       <div class="dropdown-divider"></div>
                     </li>
-                    <li>
+                    {{-- <li>
                       <a class="dropdown-item" href="#">
                         <i class="bx bx-user me-2"></i>
                         <span class="align-middle">My Profile</span>
                       </a>
-                    </li>
+                    </li> --}}
                     
                     <li>
                       <div class="dropdown-divider"></div>
