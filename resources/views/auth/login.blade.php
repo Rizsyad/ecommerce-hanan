@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="half">
-        <div class="bg order-1 order-md-2" style="background-image: url('/assets/img/banner.jpg');"></div>
+        <div class="bg order-1 order-md-2" style="background-image: url('/assets/img/banner-1.jpeg');"></div>
         <div class="contents order-2 order-md-1">
             <div class="container">
                 <div class="row align-items-center justify-content-center">

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\OrderItems;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -14,12 +15,16 @@ class InvoiceMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $orderItems;
+    protected $detailInfo;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($orderItems, $detailInfo)
     {
-        //
+        $this->orderItems = $orderItems;
+        $this->detailInfo = $detailInfo;
     }
 
     /**
@@ -40,6 +45,11 @@ class InvoiceMail extends Mailable
     {
         return new Content(
             view: 'mails.invoice',
+            // view: 'mails.invoice_testing',
+            with: [
+                'orderItems' => $this->orderItems,
+                'detailInfo' => $this->detailInfo
+            ],
         );
     }
 

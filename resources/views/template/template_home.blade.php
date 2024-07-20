@@ -8,7 +8,7 @@
     <meta content="ecommers" name="keywords" />
     <meta content="ecommers" name="description" />
 
-    <title>@yield('title')</title>
+    <title>@yield('title') | {{env('APP_NAME')}}</title>
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">

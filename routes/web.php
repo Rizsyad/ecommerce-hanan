@@ -56,13 +56,18 @@ Route::controller(HomeController::class)
         Route::get('/', 'index')->name('index');
         Route::get('shop', 'shop')->name('shop');
         Route::get('shop/{slug}/detail', 'shopDetail')->name('shopDetail');
-        Route::get('checkout', 'checkout')->name('checkout');
         Route::post('{id}/reviews', 'productReview')->name('storeReview');
-
-
+        
         // aksi cart
         Route::get('cart', 'cart')->name('cart');
         Route::get('cart/{id}/addtocart', 'addToCart')->name('addToCart');
         Route::get('cart/{id}/removefromcart', 'removeFromCart')->name('removeFromCart');
         Route::post('cart/{id}/updateCart', 'updateCart')->name('updateCart');
+
+        // aksi checkout
+        Route::get('checkout', 'checkout')->name('checkout');
+        Route::post('checkout', 'checkoutprocess')->name('checkoutprocess');
+
+        // thank you
+        Route::get("/thank-you", 'index')->name('thankyou');
     });

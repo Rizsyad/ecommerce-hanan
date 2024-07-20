@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InvoiceMail;
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderItems;
 use App\Models\Product;
 use App\Models\ProductCart;
-use App\Models\ProductReviews;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -37,32 +40,29 @@ class HomeController extends Controller
             'menu' => 'Shop',
         ];
 
-        $data = [
-            'header' => $header,
-        ];
-
         $search = $request->search;
         $sort = $request->sort;
 
-        $data['products'] = Product::query();
+        $products = Product::query();
 
         if ($search) {
-            $data['products'] = $data['products']->where('name_product', 'like', '%' . $search . '%');
+            $products = $products->where('name_product', 'like', '%' . $search . '%');
         }
 
         if ($sort) {
             if ($sort === 'asc') {
-                $data['products'] = $data['products']->orderBy('price', 'asc');
+                $products = $products->orderBy('price', 'asc');
             } elseif ($sort === 'desc') {
-                $data['products'] = $data['products']->orderBy('price', 'desc');
-            } elseif ($sort === 'rating') {
-                $data['products'] = $data['products']->orderBy('rating', 'desc');
+                $products = $products->orderBy('price', 'desc');
             } else {
-                $data['products'] = $data['products']->latest();
+                $products = $products->latest();
             }
         }
 
-        $data['products'] = $data['products']->paginate(12);
+        $data = [
+            'header' => $header,
+            'products' => $products->paginate(),
+        ];
 
         return view('shop', compact('data'));
     }
@@ -155,6 +155,11 @@ class HomeController extends Controller
 
     public function addToCart(string $id)
     {
+        // jika tidak mempunyai session, redirect ke login
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
         $checkProduct = Product::find($id);
 
         if (!$checkProduct) {
@@ -165,10 +170,12 @@ class HomeController extends Controller
         if ($checkProduct->stock <= 0) {
             return back()->withErrors(['msg' => 'Product out of stock']);
         }
-    
+
         $userId = auth()->user()->id;
-        $checkInCart = ProductCart::where('product_id', $checkProduct->id)->where('user_id', $userId)->first();
-    
+        $checkInCart = ProductCart::where('product_id', $checkProduct->id)
+            ->where('user_id', $userId)
+            ->first();
+
         // jika sudah ada di cart maka update jumlahnya
         if ($checkInCart) {
             $checkInCart->quantity += 1;
@@ -178,7 +185,7 @@ class HomeController extends Controller
             ProductCart::create([
                 'user_id' => $userId,
                 'product_id' => $checkProduct->id,
-                'quantity' => 1
+                'quantity' => 1,
             ]);
         }
 
@@ -213,47 +220,46 @@ class HomeController extends Controller
     public function updateCart(Request $request, string $id)
     {
         $request->validate([
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1',
         ]);
-    
+
         $userId = auth()->user()->id;
         $checkInCart = ProductCart::where('product_id', $id)->where('user_id', $userId)->first();
-    
+
         if (!$checkInCart) {
             return back()->withErrors(['msg' => 'Product not found in cart']);
         }
-    
+
         $product = Product::find($id);
-    
+
         $newQuantity = $request->input('quantity');
         $currentQuantity = $checkInCart->quantity;
-    
+
         if ($newQuantity > $currentQuantity) {
             $difference = $newQuantity - $currentQuantity;
-    
+
             // Periksa apakah ada stok yang cukup
             if ($product->stock < $difference) {
                 return back()->withErrors(['msg' => 'Not enough stock available']);
             }
-    
+
             // Kurangi stok produk
             $product->stock -= $difference;
         } else {
             $difference = $currentQuantity - $newQuantity;
-    
+
             // Kembalikan stok produk
             $product->stock += $difference;
         }
-    
+
         $product->save();
-    
+
         // Update jumlah di keranjang
         $checkInCart->quantity = $newQuantity;
         $checkInCart->save();
-    
+
         return back()->with('success', 'Cart updated successfully');
     }
-    
 
     public function cart()
     {
@@ -262,20 +268,20 @@ class HomeController extends Controller
             'menu' => 'Cart',
         ];
 
-        $cart = ProductCart::select('id', 'product_id', 'user_id', 'quantity')->with(
-            [
+        $cart = ProductCart::select('id', 'product_id', 'user_id', 'quantity')
+            ->with([
                 'product' => function ($query) {
-                    $query->select('id', 'image', 'name_product', 'price'); 
+                    $query->select('id', 'image', 'name_product', 'price');
                 },
                 'user' => function ($query) {
                     $query->select('id', 'name');
                 },
-            ]
-            )->get();
+            ])
+            ->get();
 
         $data = [
             'header' => $header,
-            'cart' => $cart
+            'cart' => $cart,
         ];
 
         return view('cart', compact('data'));
@@ -288,22 +294,154 @@ class HomeController extends Controller
             'menu' => 'checkout',
         ];
 
-        $cart = ProductCart::select('id', 'product_id', 'user_id', 'quantity')->with(
-            [
+        $cart = ProductCart::select('id', 'product_id', 'user_id', 'quantity')
+            ->with([
                 'product' => function ($query) {
                     $query->select('id', 'name_product', 'price');
                 },
                 'user' => function ($query) {
                     $query->select('id', 'name');
                 },
-            ]
-            )->get();
+            ])
+            ->get();
 
         $data = [
             'header' => $header,
-            'cart' => $cart
+            'cart' => $cart,
         ];
 
         return view('checkout', compact('data'));
     }
+
+    public function checkoutprocess(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'address' => 'required',
+        ]);
+
+        $address = $request->address;
+        $userId = auth()->user()->id;
+
+        // Ambil produk di keranjang belanja
+        $cartItems = ProductCart::with('product')->where('user_id', $userId)->get();
+
+        // Cek jika keranjang belanja kosong
+        if ($cartItems->isEmpty()) {
+            return back()->withErrors(['msg' => 'Sorry your cart is empty']);
+        }
+
+        // Hitung total jumlah
+        $totalAmount = $cartItems->sum(function ($cart) {
+            return $cart->quantity * $cart->product->price;
+        });
+
+        // Buat pesanan baru
+        $order = Order::create([
+            'user_id' => $userId,
+            'order_number' => rand(0, 200),
+            'total_amount' => $totalAmount,
+            'address' => $address,
+        ]);
+
+        // Cek jika pesanan gagal dibuat
+        if (!$order) {
+            return back()->withErrors(['msg' => 'Order cannot be processed']);
+        }
+
+        // Siapkan data item pesanan
+        $orderItemsData = $cartItems
+            ->map(function ($cart) use ($order) {
+                return [
+                    'order_id' => $order->id,
+                    'product_id' => $cart->product_id,
+                    'quantity' => $cart->quantity,
+                    'amount' => $cart->quantity * $cart->product->price,
+                ];
+            })
+            ->toArray();
+
+        // Insert item pesanan
+        $orderItemsInserted = OrderItems::insert($orderItemsData);
+
+        // Cek jika insert item pesanan gagal
+        if (!$orderItemsInserted) {
+            $order->delete();
+            return back()->withErrors(['msg' => 'Order cannot be processed']);
+        }
+
+        // Hapus semua item di keranjang belanja
+        ProductCart::where('user_id', $userId)->delete();
+
+        // Ambil detail pesanan untuk email
+        $orderItems = OrderItems::with(['order', 'product'])
+            ->where('order_id', $order->id)
+            ->get();
+        $orderDetails = Order::with('user')
+            ->where('id', $order->id)
+            ->first();
+
+        // Kirim email invoice
+        Mail::to(auth()->user())->send(new InvoiceMail($orderItems, $orderDetails));
+
+        // Redirect ke halaman terima kasih
+        return redirect(route('home.thankyou'));
+    }
+
+    // public function checkoutprocess(Request $request)
+    // {
+    //     $request->validate([
+    //         // 'payment' => 'required',
+    //         'address' => 'required'
+    //     ]);
+
+    //     // $payment = $request->payment;
+    //     $address = $request->address;
+
+    //     $getCart = ProductCart::with('product')->where('user_id', auth()->user()->id)->get();
+
+    //     // Cek jika keranjang belanja kosong
+    //     if ($getCart->isEmpty()) {
+    //         return back()->withErrors(['msg' => 'Sorry your cart is empty']);
+    //     }
+
+    //     $orders = Order::create([
+    //         'user_id' => auth()->user()->id,
+    //         'order_number' => rand(0, 200),
+    //         'total_amount' => $getCart->sum(function ($cart) {
+    //             return $cart->quantity * $cart->product->price;
+    //         }),
+    //         'address' => $address
+    //     ]);
+
+    //     if(!$orders) {
+    //         return back()->withErrors(['msg' => "Order cannot be processed"]);
+    //     }
+
+    //     $data = [];
+    //     foreach ($getCart as $cart) {
+    //         array_push($data, [
+    //             "order_id" => $orders->id,
+    //             "product_id" => $cart->product_id,
+    //             'quantity' => $cart->quantity,
+    //             "amount" => $cart->quantity * $cart->product->price
+    //         ]);
+    //     }
+
+    //     $orderItem = OrderItems::insert($data);
+
+    //     if(!$orderItem) {
+    //         Order::find($orders->id)->delete();
+    //         return back()->withErrors(['msg' => "Order cannot be processed"]);
+    //     }
+
+    //     ProductCart::with('product')->where('user_id', auth()->user()->id)->delete();
+
+    //     $orderItems = OrderItems::with(['order', 'product'])->where('order_id', $orders->id)->get();
+    //     $detailInfo = Order::with('user')->where('id', $orders->id)->first();
+
+    //     Mail::to('riz@gmail.com')->send(new InvoiceMail($orderItems, $detailInfo));
+
+    //     return redirect(route('home.thankyou'));
+    // }
 }

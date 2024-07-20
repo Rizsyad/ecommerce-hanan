@@ -64,23 +64,20 @@
                 <h3 class="font-weight-semi-bold mb-4">Rp. {{ number_format($data['product']['price'], 0, ',', '.') }}</h3>
                 <p class="mb-4"> {{ $data['product']['description'] }}
                 </p>
-                <div class="d-flex align-items-center mb-4 pt-2">
-                    <div class="input-group quantity mr-3" style="width: 130px;">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-minus">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                        <input type="text" class="form-control bg-secondary text-center" value="1">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-plus">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <b>Opps!</b> {{ $errors->first() }}
                     </div>
-                    <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                @endif
+
+
+                <div class="d-flex align-items-center mb-4 pt-2">
+                    <a href="{{ route('home.addToCart', $data['product']['id']) }}" class="btn btn-primary px-3"><i
+                            class="fa fa-shopping-cart mr-1"></i> Add To
+                        Cart</a>
                 </div>
             </div>
+
         </div>
         <div class="row px-xl-5">
             <div class="col">
@@ -196,8 +193,7 @@
                                         <h4 class="mb-4">Leave a review</h4>
                                         <small>Your email address will not be published. Required fields are marked *</small>
 
-                                        <form action="{{ route('home.storeReview', $data['product']['id']) }}"
-                                            method="POST">
+                                        <form action="{{ route('home.storeReview', $data['product']['id']) }}" method="POST">
                                             @csrf
                                             <div class="form-group">
                                                 <div class="d-flex my-3">
@@ -257,7 +253,7 @@
                                 <a href="{{ route('home.shopDetail', $product->slug) }}"
                                     class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
                                     Detail</a>
-                                <a href="{{route('home.addToCart', $product->id)}}" class="btn btn-sm text-dark p-0">
+                                <a href="{{ route('home.addToCart', $product->id) }}" class="btn btn-sm text-dark p-0">
                                     <i class="fas fa-shopping-cart text-primary mr-1"></i>
                                     Add To Cart
                                 </a>
