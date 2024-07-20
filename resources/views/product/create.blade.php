@@ -34,13 +34,6 @@
               @enderror
             </div>
             <div class="mb-3">
-              <label class="form-label" for="quantity">Quantity Product</label>
-              <input type="number" min="1"  class="form-control" id="quantity" value="1" name="quantity">
-              @error('quantity') 
-              <div class="alert alert-danger">{{ $message }}</div>
-              @enderror
-            </div>
-            <div class="mb-3">
               <label class="form-label" for="stock">Stock Product</label>
               <input type="number" min="1" value="1" class="form-control" id="stock"  name="stock">
               @error('stock') 

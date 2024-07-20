@@ -3,7 +3,20 @@
 @section('title', 'Product Detail')
 
 @section('head')
+    <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/css/star-rating.min.css" media="all"
+        rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/themes/krajee-svg/theme.css" media="all"
+        rel="stylesheet" type="text/css" />
+@endsection
 
+@section('footer')
+    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/js/star-rating.min.js"
+        type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+            $('#rating').rating();
+        });
+    </script>
 @endsection
 
 @section('content')
@@ -14,7 +27,8 @@
                 <div id="product-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner border">
                         <div class="carousel-item active">
-                            <img class="w-100 h-100" src="{{ asset('storage/' . $data['product']['image']) }}" alt="Image" />
+                            <img class="w-100 h-100" src="{{ asset('storage/' . $data['product']['image']) }}"
+                                alt="Image {{ $data['product']['name_product'] }}" />
                         </div>
                         @foreach ($data['product']['images'] as $image)
                             <div class="carousel-item">
@@ -46,7 +60,7 @@
                     </div>
                     <small class="pt-1">({{ $data['product']['reviews_count'] }} Reviews)</small>
                 </div>
-                
+
                 <h3 class="font-weight-semi-bold mb-4">Rp. {{ number_format($data['product']['price'], 0, ',', '.') }}</h3>
                 <p class="mb-4"> {{ $data['product']['description'] }}
                 </p>
@@ -73,7 +87,8 @@
                 <div class="nav nav-tabs justify-content-center border-secondary mb-4">
                     <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
                     <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Information</a>
-                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a>
+                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Reviews
+                        ({{ $data['product']['reviews_count'] }})</a>
                 </div>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tab-pane-1">
@@ -137,24 +152,24 @@
                     <div class="tab-pane fade" id="tab-pane-3">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-4">1 review for "{{$data['product']['name_product']}}"</h4>
-                                @foreach ($data['userReviews'] as $review)
-                                
-                                <div class="media mb-4">
-                                    <img src="https://ui-avatars.com/api/?background=random&rounded=true&name={{$review->user->name}}"
-                                        alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                    <div class="media-body">
-                                        <h6>{{$review->user->name}}<small> - <i>{{\Carbon\Carbon::parse($review->created_at)->format('d M Y')}}</i></small></h6>
-                                        <div class="text-primary mb-2">
-                                            @for ($i = 0; $i < $review->rating; $i++)
-                                                <i class="fas fa-star"></i>
-                                                
-                                            @endfor
+                                <h4 class="mb-4">{{ $data['product']['reviews_count'] }} review for
+                                    "{{ $data['product']['name_product'] }}"</h4>
+                                @foreach ($data['product']['reviews'] as $review)
+                                    <div class="media mb-4">
+                                        <img src="https://ui-avatars.com/api/?background=random&rounded=true&name={{ $review->user->name }}"
+                                            alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                        <div class="media-body">
+                                            <h6>{{ $review->user->name }}<small> -
+                                                    <i>{{ \Carbon\Carbon::parse($review->created_at)->format('d M Y') }}</i></small>
+                                            </h6>
+                                            <div class="text-primary mb-2">
+                                                @for ($i = 0; $i < $review->rating; $i++)
+                                                    <i class="fas fa-star"></i>
+                                                @endfor
+                                            </div>
+                                            <p>{{ $review->review }}</p>
                                         </div>
-                                        <p>{{$review->review}}</p>
                                     </div>
-                                </div>
-                                    
                                 @endforeach
                             </div>
                             <div class="col-md-6">
@@ -163,48 +178,50 @@
                                     </h4>
                                 @endguest
                                 @auth
-                                    <h4 class="mb-4">Leave a review</h4>
-                                    <small>Your email address will not be published. Required fields are marked *</small>
-                                    
-                                    <form action="{{ route('home.storeReview', $data['product']['id']) }}" method="POST">
-                                        @csrf
-                                        <div class="form-group">
-                                            <div class="d-flex my-3">
-                                                <p class="mb-0 mr-2">Your Rating * :</p>
-                                                <div class="text-primary">
-                                                    <label>
-                                                        <input type="radio" name="rating" value="1">
-                                                        <i class="far fa-star"></i>
-                                                    </label>
-                                                    <label>
-                                                        <input type="radio" name="rating" value="2">
-                                                        <i class="far fa-star"></i>
-                                                    </label>
-                                                    <label>
-                                                        <input type="radio" name="rating" value="3">
-                                                        <i class="far fa-star"></i>
-                                                    </label>
-                                                    <label>
-                                                        <input type="radio" name="rating" value="4">
-                                                        <i class="far fa-star"></i>
-                                                    </label>
-                                                    <label>
-                                                        <input type="radio" name="rating" value="5">
-                                                        <i class="far fa-star"></i>
-                                                    </label>
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <b>Opps!</b> {{ $errors->first() }}
+                                        </div>
+                                    @endif
+
+                                    @if (\Session::has('success'))
+                                        <div class="alert alert-success">
+                                            {{ \Session::get('success') }}
+                                        </div>
+                                    @endif
+
+                                    @if ($data['isUserReviewed'])
+                                        <h4 class="mb-4">You have reviewed this product</h4>
+                                    @else
+                                        <h4 class="mb-4">Leave a review</h4>
+                                        <small>Your email address will not be published. Required fields are marked *</small>
+
+                                        <form action="{{ route('home.storeReview', $data['product']['id']) }}"
+                                            method="POST">
+                                            @csrf
+                                            <div class="form-group">
+                                                <div class="d-flex my-3">
+                                                    <p class="mb-0 mr-2">Your Rating * :</p>
+                                                    <div class="text-primary">
+                                                        <input id="rating" name="rating" class="rating rating-loading"
+                                                            data-show-clear="false" data-show-caption="false" data-step="1"
+                                                            data-size="xs" required />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="review">Your Review *</label>
-                                            <textarea id="review" cols="30" rows="5" name="review" class="form-control"></textarea>
-                                            <small class="form-text text-muted">Review Max 255 words</small></small>
-                                        </div>
-                                       
-                                        <div class="form-group mb-0">
-                                            <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
-                                        </div>
-                                    </form>
+                                            <div class="form-group">
+                                                <label for="review">Your Review *</label>
+                                                <textarea id="review" cols="30" rows="5" name="review" class="form-control"></textarea>
+                                                <small class="form-text text-muted">Review Max 255 words</small></small>
+                                            </div>
+
+                                            <div class="form-group mb-0">
+                                                <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+                                            </div>
+                                        </form>
+                                    @endif
+
+
                                 @endauth
                             </div>
                         </div>
@@ -223,7 +240,7 @@
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel related-carousel">
-                    @foreach ($data['productsWithoutSlug'] as $product)
+                    @foreach ($data['randomProduct'] as $product)
                         <div class="card product-item border-0">
                             <div
                                 class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
@@ -233,25 +250,24 @@
                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                 <h6 class="text-truncate mb-3">{{ $product->name_product }}</h6>
                                 <div class="d-flex justify-content-center">
-                                    <h6>Rp. {{number_format($product->price, 0, ',','.')}}</h6>
+                                    <h6>Rp. {{ number_format($product->price, 0, ',', '.') }}</h6>
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
-                                <a href="{{ route('home.shopDetail', $product->slug) }}" class="btn btn-sm text-dark p-0"><i
-                                        class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                                <a href="#" class="btn btn-sm text-dark p-0"><i
-                                        class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                                <a href="{{ route('home.shopDetail', $product->slug) }}"
+                                    class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
+                                    Detail</a>
+                                <a href="{{route('home.addToCart', $product->id)}}" class="btn btn-sm text-dark p-0">
+                                    <i class="fas fa-shopping-cart text-primary mr-1"></i>
+                                    Add To Cart
+                                </a>
                             </div>
                         </div>
                     @endforeach
-                   
+
                 </div>
             </div>
         </div>
     </div>
     <!-- Products End -->
-@endsection
-
-@section('footer')
-
 @endsection

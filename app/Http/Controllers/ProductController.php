@@ -37,7 +37,6 @@ class ProductController extends Controller
         $request->validate([
             'name_product' => 'required|min:3|max:255',
             'price' => 'required|integer|min:1',
-            'quantity' => 'required|integer|min:1',
             'stock' => 'required|integer|min:1',
             'description' => 'required|min:3|max:255',
             'category_id' => 'required',
@@ -52,7 +51,6 @@ class ProductController extends Controller
             'name_product' => $request->name_product,
             'slug' => Str::slug($request->name_product),
             'price' => $request->price,
-            'quantity' => $request->quantity,
             'stock' => $request->stock,
             'description' => $request->description,
             'category_id' => $request->category_id,

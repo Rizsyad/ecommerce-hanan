@@ -42,8 +42,7 @@ class AuthController extends Controller
         }
 
         // jika login gagal
-        Session::flash('error', 'Incorrect Email or Password');
-        return redirect('auth/login');
+        return back()->withErrors(['msg' => 'Incorrect Email or Password']);
     }
 
     public function register()

@@ -15,9 +15,9 @@
                         <div class="form-block">
                             <div class="text-center mb-5">
                                 <h3>Login to <strong>Ecommerce</strong></h3>
-                                @if(session('error'))
+                                @if($errors->any())
                                 <div class="alert alert-danger">
-                                    <b>Opps!</b> {{session('error')}}
+                                    <b>Opps!</b> {{$errors->first()}}
                                 </div>
                                 @endif
                             </div>

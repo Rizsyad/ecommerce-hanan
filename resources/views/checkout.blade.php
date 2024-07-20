@@ -135,7 +135,19 @@
                         </div>
                         <div class="card-body">
                             <h5 class="font-weight-medium mb-3">Products</h5>
+                            @php
+                            $total = 0;
+                            @endphp
+                            @foreach ($data['cart'] as $cart)
+                            @php
+                                $total += $cart->product->price * $cart->quantity
+                            @endphp
                             <div class="d-flex justify-content-between">
+                                <p>{{$cart->product->name_product}} x {{$cart->quantity}}</p>
+                                <p>Rp {{ number_format($cart->product->price * $cart->quantity, 0, ',', '.') }}</p>
+                            </div>
+                            @endforeach
+                            {{-- <div class="d-flex justify-content-between">
                                 <p>Colorful Stylish Shirt 1</p>
                                 <p>$150</p>
                             </div>
@@ -146,21 +158,21 @@
                             <div class="d-flex justify-content-between">
                                 <p>Colorful Stylish Shirt 3</p>
                                 <p>$150</p>
-                            </div>
+                            </div> --}}
                             <hr class="mt-0">
                             <div class="d-flex justify-content-between mb-3 pt-1">
                                 <h6 class="font-weight-medium">Subtotal</h6>
-                                <h6 class="font-weight-medium">$150</h6>
+                                <h6 class="font-weight-medium">Rp {{ number_format($total, 0, ',', '.') }}</h6>
                             </div>
-                            <div class="d-flex justify-content-between">
+                            {{-- <div class="d-flex justify-content-between">
                                 <h6 class="font-weight-medium">Shipping</h6>
                                 <h6 class="font-weight-medium">$10</h6>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="card-footer border-secondary bg-transparent">
                             <div class="d-flex justify-content-between mt-2">
                                 <h5 class="font-weight-bold">Total</h5>
-                                <h5 class="font-weight-bold">$160</h5>
+                                <h5 class="font-weight-bold">Rp {{ number_format($total, 0, ',', '.') }}</h5>
                             </div>
                         </div>
                     </div>
@@ -169,7 +181,7 @@
                             <h4 class="font-weight-semi-bold m-0">Payment</h4>
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <div class="custom-control custom-radio">
                                     <input type="radio" class="custom-control-input" name="payment" id="paypal">
                                     <label class="custom-control-label" for="paypal">Paypal</label>
@@ -180,10 +192,10 @@
                                     <input type="radio" class="custom-control-input" name="payment" id="directcheck">
                                     <label class="custom-control-label" for="directcheck">Direct Check</label>
                                 </div>
-                            </div>
-                            <div class="">
+                            </div> --}}
+                            <div class="form-group">
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
+                                    <input type="radio" class="custom-control-input" name="payment" id="banktransfer" value="banktransfer" />
                                     <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
                                 </div>
                             </div>

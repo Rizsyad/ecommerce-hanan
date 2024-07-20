@@ -3,7 +3,6 @@
 @section('title', 'Shop')
 
 @section('head')
-
 @endsection
 
 @section('content')
@@ -59,37 +58,30 @@
                 <div class="row pb-3">
                     <div class="col-12 pb-1">
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                            <form action="">
+                                <form action="{{ route('home.shop') }}" method="GET" id="sortForm">
                                 <div class="input-group">
-                                    <form action="{{ route('home.shop') }}" method="GET" id="sortForm">
-                                        <input type="text" name="search" class="form-control" placeholder="Search by name product" value="{{ request('search') }}">
-                                        <input type="hidden" name="sort" id="sort" value="{{ request('sort') }}">
+                                        <input type="text" name="search" id="search" class="form-control" placeholder="Search by name product" value="{{ request('search') }}" />
+                                        <input type="hidden" name="sort" id="sort" value="{{ request('sort') }}" />
 
                                         <button type="submit" class="input-group-text bg-transparent text-primary">
                                             <i class="fa fa-search"></i>
                                         </button>
-                                    </form>
-                                    
-                                </div>
-                            </form>
+                                        
+                                    </div>
+                                </form>
                             <div class="dropdown ml-4">
                                 <button class="btn border dropdown-toggle" type="button" id="triggerId"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Sort by
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="triggerId">
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="setSortAndSubmit('asc')">Ascending</a>
-                                    {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="document.getElementById('sort').value='asc'; document.getElementById('sortForm').submit();">Ascending</a> --}}
-                                    {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="document.getElementById('sort').value='desc'; document.getElementById('sortForm').submit();">Latest</a> --}}
-                                    {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="setSortAndSubmit('asc')">Oldest</a>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="setSortAndSubmit('rating')">Rating</a> --}}
-                                    {{-- <a class="dropdown-item" href="#" onclick="document.getElementById('sort').value='rating'; document.getElementById('sortForm').submit();">Best Rating</a> --}}
-                                    
+                                    <a class="dropdown-item sorting" data-sort="asc">Ascending</a>
+                                    <a class="dropdown-item sorting" data-sort="desc">Descending</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     @include('components.products', ['css_col' => 'col-lg-4'])
 
                     <div class="col-12 pb-1">
@@ -103,12 +95,14 @@
     <!-- Shop End -->
 @endsection
 
-<script>
-   document.addEventListener('DOMContentLoaded', function () {
-        window.setSortAndSubmit = function(sortValue) {
-            console.log(sortValue);
-            document.getElementById('sort').value = sortValue;
-            document.getElementById('sortForm').submit();
-        };
-    });
-</script>
+@section('footer')
+    <script>
+        $(document).ready(function(){
+            $(".sorting").on('click', function(){
+                var sortValue = $(this).data("sort")
+                var sort = $("#sort").val(sortValue)
+                $('#sortForm').submit();
+            });
+        })
+    </script>
+@endsection
