@@ -27,4 +27,14 @@ class Product extends Model
     {
         return $this->hasMany(ProductReviews::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(CommentProduct::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

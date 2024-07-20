@@ -61,12 +61,15 @@
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <form action="">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search by name">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text bg-transparent text-primary">
+                                    <form action="{{ route('home.shop') }}" method="GET" id="sortForm">
+                                        <input type="text" name="search" class="form-control" placeholder="Search by name product" value="{{ request('search') }}">
+                                        <input type="hidden" name="sort" id="sort" value="{{ request('sort') }}">
+
+                                        <button type="submit" class="input-group-text bg-transparent text-primary">
                                             <i class="fa fa-search"></i>
-                                        </span>
-                                    </div>
+                                        </button>
+                                    </form>
+                                    
                                 </div>
                             </form>
                             <div class="dropdown ml-4">
@@ -75,9 +78,13 @@
                                     Sort by
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="triggerId">
-                                    <a class="dropdown-item" href="#">Latest</a>
-                                    <a class="dropdown-item" href="#">Popularity</a>
-                                    <a class="dropdown-item" href="#">Best Rating</a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="setSortAndSubmit('asc')">Ascending</a>
+                                    {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="document.getElementById('sort').value='asc'; document.getElementById('sortForm').submit();">Ascending</a> --}}
+                                    {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="document.getElementById('sort').value='desc'; document.getElementById('sortForm').submit();">Latest</a> --}}
+                                    {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="setSortAndSubmit('asc')">Oldest</a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="setSortAndSubmit('rating')">Rating</a> --}}
+                                    {{-- <a class="dropdown-item" href="#" onclick="document.getElementById('sort').value='rating'; document.getElementById('sortForm').submit();">Best Rating</a> --}}
+                                    
                                 </div>
                             </div>
                         </div>
@@ -86,25 +93,7 @@
                     @include('components.products', ['css_col' => 'col-lg-4'])
 
                     <div class="col-12 pb-1">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center mb-3">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                        {{ $data['products']->links() }}
                     </div>
                 </div>
             </div>
@@ -114,6 +103,12 @@
     <!-- Shop End -->
 @endsection
 
-@section('footer')
-
-@endsection
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+        window.setSortAndSubmit = function(sortValue) {
+            console.log(sortValue);
+            document.getElementById('sort').value = sortValue;
+            document.getElementById('sortForm').submit();
+        };
+    });
+</script>

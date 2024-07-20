@@ -57,4 +57,5 @@ Route::controller(HomeController::class)
         Route::get('shop/{slug}/detail', 'shopDetail')->name('shopDetail');
         Route::get('cart', 'cart')->name('cart');
         Route::get('checkout', 'checkout')->name('checkout');
+        Route::post('/{id}/reviews', 'productReview')->name('storeReview');
     });
