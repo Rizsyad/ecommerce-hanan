@@ -50,13 +50,10 @@
                 </form>
             </div>
             <div class="col-lg-3 col-6 text-right">
-                {{-- <a href="" class="btn border">
-                    <i class="fas fa-heart text-primary"></i>
-                    <span class="badge">5</span>
-                </a> --}}
+               
                 <a href="{{route('home.cart')}}" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge">{{\App\Models\ProductCart::where('user_id', auth()->user()->id)->count() ?? 0}}</span>
                 </a>
             </div>
         </div>

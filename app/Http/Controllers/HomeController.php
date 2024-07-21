@@ -19,7 +19,6 @@ class HomeController extends Controller
         // panggil categories secara global
         $this->shareCategories();
     }
-
     // buat function untuk memanggil secara global
     private function shareCategories()
     {
