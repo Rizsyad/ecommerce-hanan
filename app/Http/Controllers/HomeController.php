@@ -43,8 +43,13 @@ class HomeController extends Controller
 
         $search = $request->search;
         $sort = $request->sort;
+        $category = $request->category;
 
         $products = Product::query();
+
+        if ($category) {
+            $products = $products->where('category_id', $category);
+        }
 
         if ($search) {
             $products = $products->where('name_product', 'like', '%' . $search . '%');
@@ -62,7 +67,7 @@ class HomeController extends Controller
 
         $data = [
             'header' => $header,
-            'products' => $products->paginate(),
+            'products' => $products->paginate(8),
         ];
 
         return view('shop', compact('data'));
@@ -281,10 +286,8 @@ class HomeController extends Controller
                 'product' => function ($query) {
                     $query->select('id', 'image', 'name_product', 'price');
                 },
-                'user' => function ($query) {
-                    $query->select('id', 'name');
-                },
             ])
+            ->where('user_id', auth()->user()->id)
             ->get();
 
         $data = [
@@ -307,10 +310,8 @@ class HomeController extends Controller
                 'product' => function ($query) {
                     $query->select('id', 'name_product', 'price');
                 },
-                'user' => function ($query) {
-                    $query->select('id', 'name');
-                },
             ])
+            ->where('user_id', auth()->user()->id)
             ->get();
 
         $data = [
@@ -336,7 +337,7 @@ class HomeController extends Controller
 
         // Cek jika keranjang belanja kosong
         if ($cartItems->isEmpty()) {
-            return back()->withErrors(['msg' => 'Sorry your cart is empty']);
+            return back()->withInput()->withErrors(['msg' => 'Sorry your cart is empty']);
         }
 
         // Hitung total jumlah

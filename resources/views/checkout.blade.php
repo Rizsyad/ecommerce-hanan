@@ -22,7 +22,7 @@
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     <label label="address">Address</label>
-                                    <textarea name="address" id="" cols="10" rows="10" class="form-control"></textarea>
+                                    <textarea name="address" id="" cols="10" rows="10" class="form-control">{{old('address')}}</textarea>
                                 </div>
                             </div>
                         </div>

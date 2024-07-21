@@ -19,6 +19,8 @@
                                     <input type="text" name="search" id="search" class="form-control"
                                         placeholder="Search by name product" value="{{ request('search') }}" />
                                     <input type="hidden" name="sort" id="sort" value="{{ request('sort') }}" />
+                                    <input type="hidden" name="category" value="{{ request('category') }}" />
+                                    <input type="hidden" name="page" value="{{ request('page') }}" />
 
                                     <button type="submit" class="input-group-text bg-transparent text-primary">
                                         <i class="fa fa-search"></i>
@@ -39,11 +41,12 @@
                         </div>
                     </div>
 
-                    @include('components.products', ['css_col' => 'col-lg-4'])
+                    @include('components.products', ['css_col' => 'col-lg-3'])
 
                     <div class="col-12 pb-1">
-                        {{ $data['products']->links() }}
+                        {{ $data['products']->links('components.paginate') }}
                     </div>
+
                 </div>
             </div>
             <!-- Shop Product End -->

@@ -23,7 +23,7 @@
 
                 <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
                     @foreach ($categories as $item)
-                        <a href="#" class="nav-item nav-link">{{ $item->name_category }}</a>
+                        <a href="{{route('home.shop')}}?category={{$item->id}}" class="nav-item nav-link">{{ $item->name_category }}</a>
                     @endforeach
                 </div>
 
