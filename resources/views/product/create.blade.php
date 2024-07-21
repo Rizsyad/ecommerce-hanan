@@ -41,8 +41,15 @@
               @enderror
             </div>
             <div class="mb-3">
-              <label class="form-label" for="name">description Product</label>
-              <textarea name="description" id="" cols="30" rows="4" class="form-control"></textarea>
+              <label class="form-label" for="name">Short Desc Product</label>
+              <textarea name="short_description" cols="30" rows="2" class="form-control"></textarea>
+              @error('short_description') 
+              <div class="alert alert-danger">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="name">Desc Product</label>
+              <textarea name="description" cols="30" rows="2" class="form-control"></textarea>
               @error('description') 
               <div class="alert alert-danger">{{ $message }}</div>
               @enderror

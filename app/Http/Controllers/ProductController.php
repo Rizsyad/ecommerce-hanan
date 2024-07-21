@@ -38,7 +38,8 @@ class ProductController extends Controller
             'name_product' => 'required|min:3|max:255',
             'price' => 'required|integer|min:1',
             'stock' => 'required|integer|min:1',
-            'description' => 'required|min:3|max:255',
+            'short_description' => 'required|min:3|max:255',
+            'description' => 'required|min:3',
             'category_id' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -52,6 +53,7 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name_product),
             'price' => $request->price,
             'stock' => $request->stock,
+            'short_description' => $request->short_description,
             'description' => $request->description,
             'category_id' => $request->category_id,
             'image' => $img
@@ -91,7 +93,8 @@ class ProductController extends Controller
             'name_product' => 'required|min:3|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|integer|min:0',
-            'description' => 'required|min:3|max:255',
+            'short_description' => 'required|min:3|max:255',
+            'description' => 'required|min:3',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -117,6 +120,7 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name_product),
             'price' => $request->price,
             'stock' => $request->stock,
+            'short_description' => $request->short_description,
             'description' => $request->description,
             'category_id' => $request->category_id,
             'image' => $imgPath

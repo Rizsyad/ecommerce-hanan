@@ -17,8 +17,9 @@
                     <tr>
                         <th>#</th>
                         <th>Image</th>
-                        <th>Name Category</th>
+                        <th>Name Product</th>
                         <th>Slug</th>
+                        <th>stock</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -30,17 +31,24 @@
                             </td>
                             @if (!$product->image)
                             <td>
-                                <img src="{{ asset('noimage.jpg') }}" style="width: 100px; height: 100px" alt="">
+                                <img src="{{ asset('noimage.jpg') }}" style="width: 50px; height: 50px; border-radius: 100%" alt="">
                             </td>
                             @else
                             <td>
-                                    <img src="{{ asset('storage/' . $product->image) }}" style="width: 100px; height: 100px" alt="">
+                                    <img src="{{ asset('storage/' . $product->image) }}" style="width: 50px; height: 50px; border-radius: 100%" alt="">
                                     
                                 </td>
                             @endif
                             <td>{{ $product->name_product }}</td>
 
                             <td><span class=" bg-label-primary m-1 p-2">{{ $product->slug }}</span></td>
+                            <td>
+                                @if ($product->stock <= 10)
+                                    <span class="bg-label-danger p-2">Product Stock Low (10)</span>
+                                @else
+                                    <span class="bg-label-success text-black p-2">{{ $product->stock }}</span>
+                                @endif
+                            </td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow"

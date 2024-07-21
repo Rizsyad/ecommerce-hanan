@@ -101,7 +101,7 @@ class HomeController extends Controller
 
         $randomProduct = Product::where('slug', '!=', $request->slug)
             ->inRandomOrder()
-            ->limit(8)
+            ->limit(4)
             ->get();
         $avgRating = round($product->reviews->avg('rating'));
         $userReviewed = $product
@@ -401,21 +401,15 @@ class HomeController extends Controller
 
     public function thankyou(Request $request,string $invoice)
     {
-        $header = [
-            'title' => 'thankyou',
-            'menu' => 'thankyou',
-        ];
-
-        $invoice = Order::where('order_number', $invoice)->first();
-        if(!$invoice) {
+        $dataPurchase = Order::with(['user', 'orderItems'])->where('user_id', auth()->user()->id)->where('order_number', $invoice)->first();
+        if(!$dataPurchase) {
             return back()->withErrors(['msg' => 'No Invoice not found']);
         }
 
         $data = [
-            'header' => $header,
-            'invoice' => $invoice,
+            'dataPurchase' => $dataPurchase,
         ];
 
-        return view('thankyou');
+        return view('thankyou', compact('data'));
     }
 }
