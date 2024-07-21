@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CarouselImageController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
@@ -55,6 +56,12 @@ Route::controller(DashboardController::class)->middleware(['auth', 'isAdmin'])->
     });
     Route::controller(UserController::class)->prefix('users')->name('users.')->group(function() {
         Route::get('/','index')->name('index');
+    });
+    Route::controller(CarouselImageController::class)->prefix('carousel-image')->name('carouselImage.')->group(function() {
+        Route::get('/','index')->name('index');
+        Route::get('/create','create')->name('create');
+        Route::post('/create/process','store')->name('store');
+        Route::delete('/{id}/delete','destroy')->name('destroy');
     });
 });
 

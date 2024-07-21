@@ -174,6 +174,14 @@
                 </li>
               </ul>
             </li>
+            <li class="menu-item {{request()->routeIs('dashboard.carouselImage.*') ? 'active' : ''}}">
+              <a
+                href="{{route("dashboard.carouselImage.index")}}"
+                class="menu-link">
+                <i class="menu-icon tf-icons bx bx-image"></i>
+                <div data-i18n="Email">Carousel Image</div>
+              </a>
+            </li>
             {{-- <li class="menu-item {{request()->routeIs('dashboard.transaction') ? 'active' : ''}}" style="">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-money"></i>
@@ -231,7 +239,6 @@
                         </div>
                       </a>
                     </li>
-                    
                     <li>
                       <div class="dropdown-divider"></div>
                     </li>

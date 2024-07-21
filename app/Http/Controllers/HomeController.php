@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\InvoiceMail;
+use App\Models\CarouselImage;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderItems;
@@ -30,6 +31,7 @@ class HomeController extends Controller
     {
         $data['products'] = Product::latest()->limit(8)->get();
         $data['homeCategories'] = Category::withCount('products')->latest()->limit(4)->get();
+        $data['carouselImages'] = CarouselImage::latest()->get(); 
         return view('index', compact('data'));
     }
 
