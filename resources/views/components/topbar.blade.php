@@ -53,7 +53,11 @@
                
                 <a href="{{route('home.cart')}}" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
+                    @auth
                     <span class="badge">{{\App\Models\ProductCart::where('user_id', auth()->user()->id)->count() ?? 0}}</span>
+                    @else
+                    <span class="badge">0</span>
+                    @endauth
                 </a>
             </div>
         </div>
